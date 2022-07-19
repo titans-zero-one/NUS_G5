@@ -7,7 +7,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
-model = keras.models.load_model(r'./Project_Files/first.h5')
+model = keras.models.load_model(r'.\first.h5')
 labels = ['fapples','fbanana','foranges','rapples','rbanana','roranges']
 
 cap = cv2.VideoCapture(0)	
