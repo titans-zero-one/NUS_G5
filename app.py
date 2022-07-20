@@ -7,14 +7,8 @@ import pandas as pd
 
 app = Flask(__name__)
 
-model = keras.models.load_model(r'.\first.h5')
-labels = ['fapples','fbanana','foranges','rapples','rbanana','roranges']
-
-cap = cv2.VideoCapture(0)	
-
-# while True:
-# 	ret,frame = cap.read()
-# 	imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+model = keras.models.load_model(r'assets\third_veg.h5')
+labels = ['Fresh Apples','Fresh Banana','Fresh Oranges','Rotten Apples','Rotten Banana','Rotten Oranges']
 
 @app.route('/')
 def index():
@@ -23,15 +17,16 @@ def index():
 
 @app.route("/prediction", methods=["POST"])
 def prediction():
-
+	IMG_SHAPE = 150
 	img = request.files['img']
 	img.save("img.jpg")
 	image = cv2.imread("img.jpg")
 	image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-	image = cv2.resize(image, (200,200))
-	image = np.reshape(image, (1,200,200,3))
+	image = cv2.resize(image, (IMG_SHAPE,IMG_SHAPE))
+	image = np.reshape(image, (1,IMG_SHAPE,IMG_SHAPE,3))
 	pred = model.predict(image)
 	pred = np.argmax(pred)
+	print(pred)
 	pred = labels[pred]
 
 	return render_template("prediction.html", data=pred)
