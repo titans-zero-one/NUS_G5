@@ -1,8 +1,6 @@
 from keras.models import load_model
 from sklearn.metrics import accuracy_score
 
-
-
 models = [model1, model2,]
 
 preds = [model.predict(X_test) for model in models]
