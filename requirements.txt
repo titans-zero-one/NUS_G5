@@ -1,0 +1,10 @@
+Flask
+numpy
+pandas
+opencv-python
+scikit-learn
+scipy
+statistics
+PIL
+skimage
+tensorflow
