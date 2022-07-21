@@ -4,17 +4,16 @@ from tensorflow import keras
 import cv2
 import numpy as np
 import pandas as pd
+import statistics
+
+from PIL import Image
+import numpy as np
+from skimage import transform
 
 app = Flask(__name__)
 
-model = keras.models.load_model(r'.\first.h5')
-labels = ['fapples','fbanana','foranges','rapples','rbanana','roranges']
-
-cap = cv2.VideoCapture(0)	
-
-# while True:
-# 	ret,frame = cap.read()
-# 	imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+model = keras.models.load_model(r'assets\second.h5')
+labels = ['Fresh','Fresh','Fresh','Rotten','Rotten','Rotten']
 
 @app.route('/')
 def index():
@@ -23,16 +22,21 @@ def index():
 
 @app.route("/prediction", methods=["POST"])
 def prediction():
-
+	IMG_SHAPE = 150
 	img = request.files['img']
 	img.save("img.jpg")
-	image = cv2.imread("img.jpg")
-	image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-	image = cv2.resize(image, (200,200))
-	image = np.reshape(image, (1,200,200,3))
-	pred = model.predict(image)
-	pred = np.argmax(pred)
-	pred = labels[pred]
+
+	model1 = tf.keras.models.load_model(r'./assets/first.h5')
+
+	def load(filename,shape=150):
+		np_image = Image.open(filename)
+		np_image = np.array(np_image).astype('float32')/255
+		np_image = transform.resize(np_image, (shape, shape, 3))
+		np_image = np.expand_dims(np_image, axis=0)
+		return np_image
+	
+	pred = labels[np.argmax(model1.predict(load('img.jpg',200)))]
+	print(pred)
 
 	return render_template("prediction.html", data=pred)
 
