@@ -12,7 +12,7 @@ from skimage import transform
 
 app = Flask(__name__)
 
-model = keras.models.load_model(r'/first.h5')
+model = keras.models.load_model(r'first.h5')
 labels = ['Fresh','Fresh','Fresh','Rotten','Rotten','Rotten']
 
 @app.route('/')
